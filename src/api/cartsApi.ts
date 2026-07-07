@@ -10,4 +10,9 @@ export class CartsApi {
     const res = await this.request.post(this.basePath, { data: cart });
     return toApiResult(res);
   }
+
+  async getById(id: number | string): Promise<ApiResult> {
+    const res = await this.request.get(`${this.basePath}/${id}`);
+    return toApiResult(res);
+  }
 }

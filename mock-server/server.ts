@@ -63,7 +63,35 @@ app.post('/products', (req: Request, res: Response) => {
   app.post('/carts', (req: Request, res: Response) => {
     res.status(201).json({ id: nextCartId++, ...req.body });
   });
+  app.get('/carts', (req: Request, res: Response) => {
+  const { startdate, enddate } = req.query;
 
+  // Matches live FakeStoreAPI: this is the ONE place in the entire API
+  // where we found real server-side validation - a malformed date
+  // returns a structured 400, not a silent pass-through like everywhere
+  // else in this project.
+  const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+  if (
+    (startdate && !dateFormat.test(String(startdate))) ||
+    (enddate && !dateFormat.test(String(enddate)))
+  ) {
+    res.status(400).json({
+      status: 'error',
+      message: 'date format is not correct. it should be in yyyy-mm-dd format',
+    });
+    return;
+  }
+
+  // Our mock has no cart data seeded, so a valid range just returns [].
+  res.status(200).json([]);
+});
+
+app.get('/carts/:id', (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  // Matches live: no real seeded carts in the mock, so every id "not found"
+  // except id 1, which I faked to keep the "existing cart" test meaningful.
+  res.status(200).json(id === 1 ? { id: 1, userId: 1, date: '2020-03-02', products: [] } : null);
+});
   return app;
 }
 

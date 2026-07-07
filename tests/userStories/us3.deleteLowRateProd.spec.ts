@@ -13,8 +13,6 @@ test.describe('User Story 3: delete the product with the lowest rating', () => {
     );
     expect(ratedProducts.length).toBeGreaterThan(0);
 
-    // AC1: strictly lowest rating.rate; tie-break on lowest id for a
-    // deterministic, repeatable choice.
     lowestRatedProduct = ratedProducts.reduce((lowest, current) => {
       if (current.rating!.rate < lowest.rating!.rate) return current;
       if (current.rating!.rate === lowest.rating!.rate && current.id < lowest.id) return current;
@@ -27,7 +25,7 @@ test.describe('User Story 3: delete the product with the lowest rating', () => {
   test('deletes the identified lowest-rated product and returns it in the response', async ({
     productsApi,
   }) => {
-    expect(lowestRatedProduct).toBeDefined(); // depends on previous test running first
+    expect(lowestRatedProduct).toBeDefined();
 
     const res = await productsApi.remove(lowestRatedProduct.id);
 
@@ -38,7 +36,7 @@ test.describe('User Story 3: delete the product with the lowest rating', () => {
   test('the deleted product no longer appears in the product listing (documents a known API limitation)', async ({
     productsApi,
   }) => {
-    test.fail(); // desired per AC2; this API does not persist deletes
+    test.fail();
 
     const listRes = await productsApi.getAll();
     const stillPresent = (listRes.data as Product[]).some((p) => p.id === lowestRatedProduct.id);
@@ -49,7 +47,7 @@ test.describe('User Story 3: delete the product with the lowest rating', () => {
   test('retrieving the deleted product by id returns 404 (documents a known API limitation)', async ({
     productsApi,
   }) => {
-    test.fail(); // desired per AC3; this API returns 200/null instead, not 404
+    test.fail();
 
     const res = await productsApi.getById(lowestRatedProduct.id);
     expect(res.status).toBe(404);

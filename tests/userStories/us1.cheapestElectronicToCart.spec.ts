@@ -64,4 +64,29 @@ test.describe('User Story 1: view products & add cheapest in-stock electronics i
     const productNow = await productsApi.getById(cheapestInStockElectronic.id);
     expect((productNow.data as Product).price).toBe(cheapestInStockElectronic.price);
   });
+
+  test('the added item is still in the cart on a subsequent fetch (documents a known API limitation)', async ({
+    cartsApi,
+  }) => {
+    test.fail(); // desired per AC3; this API does not persist cart writes either
+
+    const cartPayload = {
+      userId: SHOPPER_USER_ID,
+      date: new Date().toISOString().slice(0, 10),
+      products: [{ productId: cheapestInStockElectronic.id, quantity: QUANTITY_TO_ADD }],
+    };
+    const createRes = await cartsApi.create(cartPayload);
+    const cartId = (createRes.data as { id: number }).id;
+
+    // Re-fetch the SAME cart independently, instead of trusting the
+    // create response - this is what actually distinguishes "the API
+    // echoed something back" from "the item is really in the cart."
+    const fetchRes = await cartsApi.getById(cartId);
+    const fetchedCart = fetchRes.data as { products?: { productId: number }[] } | null;
+
+    const found = fetchedCart?.products?.some(
+      (p) => p.productId === cheapestInStockElectronic.id
+    );
+    expect(found).toBe(true);
+  });
 });
