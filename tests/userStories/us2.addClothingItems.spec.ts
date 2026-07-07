@@ -20,7 +20,7 @@ test.describe('User Story 2: add three new clothing items to the catalogue', () 
       createdProducts.push(created);
     }
 
-    // AC1 (names): genuinely testable - our factory guarantees unique
+    // AC1 (names): genuinely testable - Factory guarantees unique
     // titles, and the API echoes back whatever title we send.
     const titles = createdProducts.map((p) => p.title);
     expect(new Set(titles).size).toBe(titles.length);
@@ -31,7 +31,7 @@ test.describe('User Story 2: add three new clothing items to the catalogue', () 
   }) => {
     // desired per AC1; live-verified that this API returns the SAME
     // computed "fake id" on every POST call, since nothing is ever really
-    // inserted - see debug investigation in chat history / README.
+    // inserted
     test.fail();
 
     const results: number[] = [];

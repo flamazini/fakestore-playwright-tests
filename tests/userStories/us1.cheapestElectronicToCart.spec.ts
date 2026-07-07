@@ -60,7 +60,7 @@ test.describe('User Story 1: view products & add cheapest in-stock electronics i
     expect(lineItem?.quantity).toBe(QUANTITY_TO_ADD);
 
     // AC3 (price): /carts doesn't store price - "correct price" means the
-    // price quoted at selection time still matches the catalogue now.
+    // price quoted at selection time still matches the catalogue.
     const productNow = await productsApi.getById(cheapestInStockElectronic.id);
     expect((productNow.data as Product).price).toBe(cheapestInStockElectronic.price);
   });
