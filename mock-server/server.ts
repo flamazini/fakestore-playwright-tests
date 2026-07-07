@@ -82,7 +82,7 @@ app.post('/products', (req: Request, res: Response) => {
     return;
   }
 
-  // Our mock has no cart data seeded, so a valid range just returns [].
+  // Mock has no cart data seeded, so a valid range just returns [].
   res.status(200).json([]);
 });
 

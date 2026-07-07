@@ -8,7 +8,7 @@ export interface ApiResult<T = unknown> {
 /**
  * Normalises a Playwright APIResponse into { status, data }, tolerating
  * empty/non-JSON bodies (e.g. some 404s might not return a JSON body at
- * all - we don't want that to throw and crash a test that's only
+ * all - don't want that to throw and crash a test that's only
  * checking the status code).
  */
 export async function toApiResult<T = unknown>(res: APIResponse): Promise<ApiResult<T>> {

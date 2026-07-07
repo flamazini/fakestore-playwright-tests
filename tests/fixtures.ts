@@ -15,16 +15,6 @@ declare module '@playwright/test' {
   }
 }
 
-/**
- * `base.extend<...>({...})` teaches Playwright two new fixtures:
- * `productsApi` and `cartsApi`. Each one receives Playwright's OWN
- * fixtures (here, `request` - the config-aware one from Step 4/6) and
- * must call `use(...)` with the value tests should actually receive.
- *
- * Every test file from now on imports `test`/`expect` from THIS file,
- * never directly from '@playwright/test' - that's what makes
- * `productsApi`/`cartsApi` available as plain destructured parameters.
- */
 export const test = base.extend<ApiFixtures>({
   productsApi: async ({ request }, use) => {
     await use(new ProductsApi(request));
@@ -34,10 +24,6 @@ export const test = base.extend<ApiFixtures>({
   },
 });
 
-/**
- * Custom matcher: expect(data).toMatchZodSchema(productSchema) instead of
- * manually calling .safeParse() and asserting on .success in every test.
- */
 export const expect = baseExpect.extend({
   toMatchZodSchema(received: unknown, schema: ZodSchema) {
     const result = schema.safeParse(received);
