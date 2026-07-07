@@ -113,4 +113,9 @@ Verified: **28/28 tests passing identically against both the local mock server a
 
 ## What I'd add next with more time
 
-- `PUT`/`PATCH`/`DELETE` on `/carts/:id` - behaviour was investigated and confirmed to follow the same non-persistence pattern as
+- `PUT`/`PATCH`/`DELETE` on `/carts/:id` - behaviour was investigated and confirmed to follow the same non-persistence pattern as `/products`, but never turned into real test assertions.
+- `GET /carts/user/:userId` - untested; worth checking whether it shares the same date-validation logic as `GET /carts` or has its own implementation.
+- `sort`/`limit` query params on `/carts` - confirmed supported on `/products`, never verified on `/carts`.
+- `/users` and `/auth/login` - zero coverage, out of scope for this pass.
+- A scheduled nightly `test:live` CI run, separate from a PR-blocking `test:local` job, so live-API drift never blocks a PR but is still caught on a cadence.
+- Fix the test-isolation debt: `us1`/`us2`/`us3` each share state across tests via `let`/array mutation, which only works safely because `fullyParallel: false`. A more isolated design would have each test independently derive what it needs.
